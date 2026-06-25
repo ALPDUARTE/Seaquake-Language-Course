@@ -26,7 +26,7 @@ jobs:
 
     # Mudamos para assembleDebug para evitar erros de falta de chave de assinatura (JKS) no GitHub
     - name: Compilar APK
-      run: ./gradlew assembleDebug
+      run: ./gradlew assembleDebug --no-daemon -Pksp.use.intellij.api=false -Pksp.incremental=false
 
     - name: Publicar no GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4

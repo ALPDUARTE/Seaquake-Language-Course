@@ -96,12 +96,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         
-        setupRemoteConfig()
-
         // Esconde as barras de sistema (status e navegação) globalmente para todo o app
         val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
         windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+        
+        // Inicialização de verificação de atualização via Remote Config (CI/CD)
+        setupRemoteConfig()
 
         voiceManager = VoiceManager(this)
         setContent {
