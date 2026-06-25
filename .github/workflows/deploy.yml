@@ -1,0 +1,44 @@
+name: Gerar APK e Atualizar Firebase
+
+on:
+  push:
+    branches:
+      - main # Dispara a automação quando você envia código para a main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Baixa o código do repositório na máquina virtual
+    - name: Checkout do código
+      uses: actions/checkout@v4
+
+    # 2. Configura o Java (necessário para compilar Android)
+    - name: Configurar Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    # 3. Configura o Gradle
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+
+    # 4. Compila o APK de produção (Release)
+    - name: Compilar APK de Release
+      run: ./gradlew assembleRelease
+
+    # 5. Envia o APK gerado para o GitHub Pages
+    - name: Publicar no GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: app/build/outputs/apk/release
+        branch: gh-pages # Envia para a branch do GitHub Pages
+
+    # 6. Atualiza o número da versão no Firebase Remote Config
+    - name: Atualizar Versão no Firebase
+      uses: FirebaseExtended/action-remote-config@v1
+      with:
+        firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        template: ./firebase-config-template.json

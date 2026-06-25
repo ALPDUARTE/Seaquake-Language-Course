@@ -1053,7 +1053,7 @@ fun SecretaryScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedButton(
+            Button(
                 onClick = {
                     (context as? Activity)?.let {
                         it.finishAndRemoveTask()
@@ -1061,10 +1061,13 @@ fun SecretaryScreen(
                     }
                 },
                 modifier = Modifier.fillMaxWidth().height(50.dp),
-                border = BorderStroke(1.dp, Color(0xFF512DA8)),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFF69B4), // Cor Rosa (Hot Pink)
+                    contentColor = Color.White
+                )
             ) {
-                Text("Fechar Aplicativo", color = Color(0xFF512DA8), fontWeight = FontWeight.Bold)
+                Text("Fechar Aplicativo", fontWeight = FontWeight.Bold)
             }
             Spacer(modifier = Modifier.height(24.dp))
         }

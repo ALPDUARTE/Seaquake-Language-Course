@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "379689111004",
+    "project_id": "seaquake-language-course",
+    "storage_bucket": "seaquake-language-course.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:379689111004:android:05fefafe5b331780135319",
+        "android_client_info": {
+          "package_name": "com.example.seaquakeiacourse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "379689111004-njfk8u8mh3q16i8nlvtuc35uuilr4u42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGqvaCoUs2vgMGtHUvM_7tP2RWUTR5GDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "379689111004-njfk8u8mh3q16i8nlvtuc35uuilr4u42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

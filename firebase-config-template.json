@@ -1,0 +1,10 @@
+{
+  "parameters": {
+    "versao_mais_recente": {
+      "defaultValue": {
+        "value": "1"
+      },
+      "valueType": "NUMBER"
+    }
+  }
+}
