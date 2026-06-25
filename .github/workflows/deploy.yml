@@ -51,8 +51,8 @@ jobs:
         # Gera o JSON final do Remote Config baseado no template e no VERSION_CODE
         sed "s/\"value\": \"1\"/\"value\": \"$VERSION_CODE\"/" firebase-config-template.json > remote-config.json
         
-        # Faz o deploy para o Firebase
-        firebase remoteconfig:push remote-config.json
+        # Faz o deploy para o Firebase - Comando corrigido e com ID do projeto
+        firebase remote-config:push remote-config.json --project seaquake-language-course
         
         # Limpeza
         rm service-account.json
