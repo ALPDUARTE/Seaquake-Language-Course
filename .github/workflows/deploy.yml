@@ -1,4 +1,4 @@
-name: Gerar APK e Atualizar Firebase
+name: Gerar APK e Atualizar Versao no Site
 
 on:
   push:
@@ -24,35 +24,25 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
-    # Mudamos para assembleDebug para evitar erros de falta de chave de assinatura (JKS) no GitHub
     - name: Compilar APK
       run: ./gradlew assembleDebug --no-daemon -Pksp.use.intellij.api=false -Pksp.incremental=false
 
-    - name: Publicar no GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        folder: app/build/outputs/apk/debug
-        branch: gh-pages
-
-    - name: Instalar Firebase CLI
-      run: npm install -g firebase-tools
-
-    - name: Atualizar Versão no Firebase Remote Config
-      env:
-        FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+    - name: Preparar Arquivos para Deploy
       run: |
-        # Cria o arquivo de credenciais temporário
-        echo "$FIREBASE_SERVICE_ACCOUNT" > service-account.json
-        export GOOGLE_APPLICATION_CREDENTIALS=service-account.json
+        mkdir deploy_folder
+        # Copia o APK gerado
+        cp app/build/outputs/apk/debug/app-debug.apk deploy_folder/app-release.apk
         
         # Obtém o versionCode atual do arquivo version.properties
         VERSION_CODE=$(grep 'VERSION_CODE' app/version.properties | cut -d'=' -f2)
         
-        # Gera o JSON final do Remote Config baseado no template e no VERSION_CODE
-        sed "s/\"value\": \"1\"/\"value\": \"$VERSION_CODE\"/" firebase-config-template.json > remote-config.json
+        # Cria o arquivo version.json para o aplicativo ler
+        echo "{\"latestVersion\": $VERSION_CODE}" > deploy_folder/version.json
         
-        # Faz o deploy para o Firebase - Comando corrigido e com ID do projeto
-        firebase remote-config:push remote-config.json --project seaquake-language-course
-        
-        # Limpeza
-        rm service-account.json
+        echo "Versão $VERSION_CODE preparada para deploy."
+
+    - name: Publicar no GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: deploy_folder
+        branch: gh-pages
