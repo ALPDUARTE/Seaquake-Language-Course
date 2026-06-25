@@ -127,7 +127,6 @@ dependencies {
     implementation(platform(libs.google.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
-    implementation("com.google.firebase:firebase-config")
     implementation(libs.play.services.auth)
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
