@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "379689111004",
+    "project_id": "seaquake-language-course",
+    "storage_bucket": "seaquake-language-course.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:379689111004:android:05fefafe5b331780135319",
+        "android_client_info": {
+          "package_name": "SeaquakeIACourse.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "379689111004-20bjdj7aa3ha91hkt71h24jael61di2n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "SeaquakeIACourse.app",
+            "certificate_hash": "84bdc93dc8425f37a3ffff3ad2389c90d00b74f5"
+          }
+        },
+        {
+          "client_id": "379689111004-strslud0f516f480ivegfo22inobj8u3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "SeaquakeIACourse.app",
+            "certificate_hash": "cd2ce8fcbc39b97be8ca5fce6e763baed58fa128"
+          }
+        },
+        {
+          "client_id": "379689111004-v5q1nhjhd7lufvfhjpnanhc19av7d7u8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "SeaquakeIACourse.app",
+            "certificate_hash": "3e12740e9e35a210ea41d4f2bc03aac25724c675"
+          }
+        },
+        {
+          "client_id": "379689111004-njfk8u8mh3q16i8nlvtuc35uuilr4u42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGqvaCoUs2vgMGtHUvM_7tP2RWUTR5GDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "379689111004-njfk8u8mh3q16i8nlvtuc35uuilr4u42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
