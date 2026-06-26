@@ -130,19 +130,28 @@ class MainActivity : ComponentActivity() {
                 connection.connectTimeout = 5000
                 connection.readTimeout = 5000
                 
+                android.util.Log.d("MainActivity", "🔍 Verificando atualização no site...")
+                
                 if (connection.responseCode == 200) {
                     val response = connection.inputStream.bufferedReader().readText()
                     val json = org.json.JSONObject(response)
                     val latestVersion = json.optLong("latestVersion", 0L)
                     
+                    android.util.Log.d("MainActivity", "📊 Versão Local: ${BuildConfig.VERSION_CODE} | Versão no Site: $latestVersion")
+                    
                     if (latestVersion > BuildConfig.VERSION_CODE) {
+                        android.util.Log.i("MainActivity", "🚀 Nova atualização encontrada!")
                         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
                             showUpdateDialog()
                         }
+                    } else {
+                        android.util.Log.d("MainActivity", "✅ Aplicativo já está na versão mais recente.")
                     }
+                } else {
+                    android.util.Log.e("MainActivity", "❌ Erro ao acessar site de versão (HTTP ${connection.responseCode})")
                 }
             } catch (e: Exception) {
-                android.util.Log.e("MainActivity", "Erro ao verificar versão: ${e.message}")
+                android.util.Log.e("MainActivity", "❌ Erro técnico na verificação de versão: ${e.message}")
             }
         }
     }
@@ -1064,15 +1073,27 @@ fun SecretaryScreen(
 
             Button(
                 onClick = {
-                    (context as? Activity)?.let {
-                        it.finishAndRemoveTask()
-                        android.os.Process.killProcess(android.os.Process.myPid())
+                    // Tenta deslogar para exigir login na próxima abertura
+                    try {
+                        val auth = com.google.firebase.auth.FirebaseAuth.getInstance()
+                        auth.signOut()
+                        android.util.Log.d("MainActivity", "Logout realizado com sucesso.")
+                    } catch (e: Exception) {
+                        android.util.Log.e("MainActivity", "Erro ao deslogar: ${e.message}")
+                    }
+
+                    // Encerra atividade e o processo com delay para o signOut
+                    (context as? Activity)?.let { activity ->
+                        activity.finishAffinity()
+                        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                            android.os.Process.killProcess(android.os.Process.myPid())
+                        }, 350)
                     }
                 },
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF69B4), // Cor Rosa (Hot Pink)
+                    containerColor = Color(0xFFFF00FF), // Cor Magenta
                     contentColor = Color.White
                 )
             ) {

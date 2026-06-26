@@ -36,7 +36,7 @@ if (isVersionIncrementNeeded || isCI) {
     currentVersionCode++
     versionProps.setProperty("VERSION_CODE", currentVersionCode.toString())
     versionPropsFile.outputStream().use { stream ->
-        versionProps.store(stream, "Auto-incremented version")
+        versionProps.store(stream, "Auto-incremented version code: $currentVersionCode")
     }
 }
 
