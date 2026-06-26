@@ -27,6 +27,9 @@ jobs:
     - name: Compilar APK
       run: ./gradlew assembleDebug --no-daemon -Pksp.use.intellij.api=false -Pksp.incremental=false
 
+    - name: Gerar Relatorio de Assinatura (SHA-1/SHA-256)
+      run: ./gradlew signingReport --no-daemon
+
     - name: Preparar Arquivos para Deploy
       run: |
         mkdir deploy_folder
