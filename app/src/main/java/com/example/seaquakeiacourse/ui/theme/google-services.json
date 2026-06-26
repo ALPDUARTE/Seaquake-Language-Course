@@ -14,11 +14,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "379689111004-dc79uslkl7n7k905qe2d34et9h3bftcc.apps.googleusercontent.com",
+          "client_id": "379689111004-20bjdj7aa3ha91hkt71h24jael61di2n.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "SeaquakeIACourse.app",
             "certificate_hash": "84bdc93dc8425f37a3ffff3ad2389c90d00b74f5"
+          }
+        },
+        {
+          "client_id": "379689111004-strslud0f516f480ivegfo22inobj8u3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "SeaquakeIACourse.app",
+            "certificate_hash": "cd2ce8fcbc39b97be8ca5fce6e763baed58fa128"
+          }
+        },
+        {
+          "client_id": "379689111004-v5q1nhjhd7lufvfhjpnanhc19av7d7u8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "SeaquakeIACourse.app",
+            "certificate_hash": "3e12740e9e35a210ea41d4f2bc03aac25724c675"
           }
         },
         {
