@@ -76,6 +76,8 @@ import com.google.firebase.firestore.firestore
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import android.net.Uri
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -99,8 +101,8 @@ class MainActivity : ComponentActivity() {
         windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
         
-        // Inicialização de verificação de atualização via GitHub Pages (CI/CD)
-        setupUpdateCheck()
+        // Inicialização de verificação de atualização via Remote Config (CI/CD)
+        setupRemoteConfig()
 
         voiceManager = VoiceManager(this)
         setContent {
@@ -115,38 +117,29 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun setupUpdateCheck() {
-        lifecycleScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-            try {
-                val url = java.net.URL("https://alpduarte.github.io/Seaquake-Language-Course/version.json")
-                val connection = url.openConnection() as java.net.HttpURLConnection
-                connection.requestMethod = "GET"
-                connection.connectTimeout = 5000
-                connection.readTimeout = 5000
-                
-                if (connection.responseCode == 200) {
-                    val response = connection.inputStream.bufferedReader().readText()
-                    val json = org.json.JSONObject(response)
-                    val latestVersion = json.optLong("latestVersion", 0L)
-                    
-                    if (latestVersion > BuildConfig.VERSION_CODE) {
-                        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
-                            showUpdateDialog()
-                        }
-                    }
+    private fun setupRemoteConfig() {
+        val remoteConfig = FirebaseRemoteConfig.getInstance()
+        val configSettings = FirebaseRemoteConfigSettings.Builder()
+            .setMinimumFetchIntervalInSeconds(3600)
+            .build()
+        remoteConfig.setConfigSettingsAsync(configSettings)
+        remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val latestVersion = remoteConfig.getLong("versao_mais_recente")
+                if (latestVersion > BuildConfig.VERSION_CODE) {
+                    showUpdateDialog()
                 }
-            } catch (e: Exception) {
-                android.util.Log.e("MainActivity", "Erro ao verificar versão: ${e.message}")
             }
         }
     }
 
     private fun showUpdateDialog() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://alpduarte.github.io/Seaquake-Language-Course/app-release.apk"))
+        
         android.app.AlertDialog.Builder(this)
             .setTitle("Atualização Disponível")
-            .setMessage("Uma nova versão do Seaquake IA Course está disponível no site. Deseja baixar o APK agora?")
+            .setMessage("Uma nova versão do Seaquake IA Course está disponível. Deseja baixar agora?")
             .setPositiveButton("Sim") { _, _ ->
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://alpduarte.github.io/Seaquake-Language-Course/app-release.apk"))
                 startActivity(intent)
             }
             .setNegativeButton("Mais tarde", null)
@@ -1063,26 +1056,15 @@ fun SecretaryScreen(
 
             Button(
                 onClick = {
-                    // Tenta deslogar usando a instância correta do Firebase Auth
-                    try {
-                        val auth = com.google.firebase.auth.FirebaseAuth.getInstance()
-                        auth.signOut()
-                    } catch (e: Exception) {
-                        android.util.Log.e("MainActivity", "Erro no logout: ${e.message}")
-                    }
-
-                    // Encerra a atividade e o processo com um pequeno delay para o signOut
-                    (context as? Activity)?.let { activity ->
-                        activity.finishAffinity()
-                        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-                            android.os.Process.killProcess(android.os.Process.myPid())
-                        }, 300)
+                    (context as? Activity)?.let {
+                        it.finishAndRemoveTask()
+                        android.os.Process.killProcess(android.os.Process.myPid())
                     }
                 },
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF00FF), // Cor Magenta
+                    containerColor = Color(0xFFFF69B4), // Cor Rosa (Hot Pink)
                     contentColor = Color.White
                 )
             ) {
