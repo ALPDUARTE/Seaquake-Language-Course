@@ -20,20 +20,23 @@ if (versionPropsFile.exists()) {
     currentVersionCode = versionProps.getProperty("VERSION_CODE")?.toInt() ?: 1
 }
 
-// Verifica se é um build de release de forma compatível
-var isRelease = false
+// Verifica se é um build de release ou se está rodando no GitHub Actions (CI)
+var isVersionIncrementNeeded = false
+val isCI = System.getenv("GITHUB_ACTIONS") == "true"
+
 for (task in gradle.startParameter.taskNames) {
     if (task.contains("Release", ignoreCase = true)) {
-        isRelease = true
+        isVersionIncrementNeeded = true
         break
     }
 }
 
-if (isRelease) {
+// Se estiver no GitHub Actions, sempre incrementamos para garantir que o APK do site seja novo
+if (isVersionIncrementNeeded || isCI) {
     currentVersionCode++
     versionProps.setProperty("VERSION_CODE", currentVersionCode.toString())
     versionPropsFile.outputStream().use { stream ->
-        versionProps.store(stream, null)
+        versionProps.store(stream, "Auto-incremented version")
     }
 }
 

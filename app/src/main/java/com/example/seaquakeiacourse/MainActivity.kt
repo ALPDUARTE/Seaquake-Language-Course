@@ -115,10 +115,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onDestroy() {
+        voiceManager?.stop()
+        super.onDestroy()
+    }
+
     private fun setupUpdateCheck() {
         lifecycleScope.launch(kotlinx.coroutines.Dispatchers.IO) {
             try {
-                val url = java.net.URL("https://alpduarte.github.io/Seaquake-Language-Course/version.json")
+                // Adicionamos um timestamp para ignorar o cache do GitHub Pages
+                val url = java.net.URL("https://alpduarte.github.io/Seaquake-Language-Course/version.json?cb=${System.currentTimeMillis()}")
                 val connection = url.openConnection() as java.net.HttpURLConnection
                 connection.requestMethod = "GET"
                 connection.connectTimeout = 5000
@@ -152,11 +158,6 @@ class MainActivity : ComponentActivity() {
             .setNegativeButton("Mais tarde", null)
             .setCancelable(false)
             .show()
-    }
-
-    override fun onDestroy() {
-        voiceManager?.stop()
-        super.onDestroy()
     }
 }
 
